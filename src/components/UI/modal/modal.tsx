@@ -18,13 +18,13 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.6)", // Darken the backdrop
+            backgroundColor: "rgba(0, 0, 0, 0.6)", 
             zIndex: 999,
             display: "flex",
-            alignItems: "center", // Center modal vertically
-            justifyContent: "center", // Center modal horizontally
+            alignItems: "center", 
+            justifyContent: "center",
           }}
-          onClick={onClose} // Close modal when clicking on the backdrop
+          onClick={onClose} 
         />
       )}
       <div
@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
           width: open ? "600px" : "0",
           boxShadow: open ? "0 4px 20px rgba(0,0,0,0.3)" : "none",
           padding: open ? "2rem" : "0",
-          borderRadius: "12px", // Soften the corners
+          borderRadius: "12px", 
         }}
         role="dialog"
         aria-modal="true"

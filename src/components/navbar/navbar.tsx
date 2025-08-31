@@ -1,67 +1,126 @@
-import Search from '../UI/shearch/shearch';
-import './navbar.css';
-import { useState } from 'react';
-import { getPublicidades } from '../../api/publicidad/publicidad';
-import { PublicidadAPIResponce } from '../../interfaces/publicidad.interface';
+import Search from "../UI/shearch/shearch";
+import "./navbar.css";
+import { useState, useEffect } from "react";
+import {
+  getPublicidades,
+  getUserByUsername,
+} from "../../api/publicidad/publicidad";
+import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
 
-const Navbar = ({ onFilter }: { onFilter: (ads: PublicidadAPIResponce[]) => void }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchType, setSearchType] = useState<'title' | 'body'>('title'); // Estado para el tipo de búsqueda
+const Navbar = ({
+  onFilter,
+}: {
+  onFilter: (ads: PublicidadAPIResponce[]) => void;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchType, setSearchType] = useState<
+    "title" | "body" | "userId" | "username"
+  >("title");
+  const [userId, setUserId] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
 
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
+  const toggleNavbar = () => setIsOpen(!isOpen);
 
-    const handleSearch = async (query: string) => {
-        try {
-            let results: PublicidadAPIResponce[] = [];
-            if (searchType === 'title') {
-                results = await getPublicidades(query, undefined); // Buscar por título
-            } else if (searchType === 'body') {
-                results = await getPublicidades(undefined, query); // Buscar por cuerpo
-            }
-            onFilter(results); // Pasar los resultados filtrados al componente padre
-        } catch (error) {
-            console.error('Error fetching publicidades:', error);
+  const handleSearch = async (query: string) => {
+    try {
+      let results: PublicidadAPIResponce[] = [];
+
+      if (searchType === "title") {
+        results = await getPublicidades(query, undefined, undefined);
+      } else if (searchType === "body") {
+        results = await getPublicidades(undefined, query, undefined);
+      } else if (searchType === "userId") {
+        const id = parseInt(userId);
+        if (!isNaN(id)) {
+          results = await getPublicidades(undefined, undefined, id);
+        } else {
+          results = [];
         }
-    };
+      } else if (searchType === "username" && username.trim()) {
+        const user = await getUserByUsername(username.trim());
+        if (user) {
+          results = await getPublicidades(undefined, undefined, user.id);
+        } else {
+          results = [];
+        }
+      }
 
-    const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSearchType(e.target.value as 'title' | 'body'); // Actualizar el tipo de búsqueda
-    };
+      onFilter(results);
+    } catch (error) {
+      console.error("Error fetching publicidades:", error);
+    }
+  };
 
-    return (
-        <>
-            <button className="navbar-toggle" onClick={toggleNavbar}>
-                {isOpen ? 'Cerrar' : 'Filtros'}
-            </button>
-            <div className={`vertical-navbar ${isOpen ? 'open' : ''}`}>
-                <h3>Filtros</h3>
-                <div className="filter-group">
-                    <label htmlFor="searchType">Buscar por:</label>
-                    <select
-                        id="searchType"
-                        className="filter-select"
-                        value={searchType}
-                        onChange={handleSearchTypeChange}
-                    >
-                        <option value="title">Título</option>
-                        <option value="body">Cuerpo</option>
-                    </select>
-                </div>
-                <Search onSearch={handleSearch} />
-                <div className="filter-group">
-                    <select className="filter-select">
-                        <option value="">Tipo de publicidad</option>
-                        <option value="tipo1">Tipo 1</option>
-                        <option value="tipo2">Tipo 2</option>
-                        <option value="tipo3">Tipo 3</option>
-                    </select>
-                </div>
-            </div>
-        </>
-    );
+  const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSearchType(e.target.value as "title" | "body" | "userId" | "username");
+    setUserId("");
+    setUsername("");
+  };
+
+  useEffect(() => {
+    if (searchType === "username" && username.trim()) {
+      handleSearch(username);
+    }
+  }, [username, searchType]);
+
+  return (
+    <>
+      <button className="navbar-toggle" onClick={toggleNavbar}>
+        {isOpen ? "Cerrar" : "Filtros"}
+      </button>
+      <div className={`vertical-navbar ${isOpen ? "open" : ""}`}>
+        <h3>Filtros</h3>
+        <div className="filter-group">
+          <label htmlFor="searchType">Buscar por:</label>
+          <select
+            id="searchType"
+            className="filter-select"
+            value={searchType}
+            onChange={handleSearchTypeChange}
+          >
+            <option value="title">Título</option>
+            <option value="body">Cuerpo</option>
+            <option value="userId">ID de Usuario</option>
+            <option value="username">Nombre de Usuario</option>
+          </select>
+        </div>
+
+        {searchType === "userId" && (
+          <div className="filter-group">
+            <label htmlFor="userId">ID de Usuario:</label>
+            <input
+              id="userId"
+              type="number"
+              className="filter-select"
+              value={userId}
+              onChange={(e) => {
+                setUserId(e.target.value);
+                handleSearch(e.target.value);
+              }}
+            />
+          </div>
+        )}
+
+        {searchType === "username" && (
+          <div className="filter-group">
+            <label htmlFor="username">Nombre de Usuario:</label>
+            <input
+              id="username"
+              type="text"
+              className="filter-select"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Escribe el nombre del usuario"
+            />
+          </div>
+        )}
+
+        {(searchType === "title" || searchType === "body") && (
+          <Search onSearch={handleSearch} />
+        )}
+      </div>
+    </>
+  );
 };
-
 
 export default Navbar;

@@ -15,7 +15,9 @@ function Publicidad() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [ads, setAds] = useState<PublicidadAPIResponse[]>([]);
   const [filteredAds, setFilteredAds] = useState<PublicidadAPIResponse[]>([]);
-  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponse | null>(null);
+  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponse | null>(
+    null
+  );
   const [comments, setComments] = useState<ComentarioAPIResponse[]>([]);
   const [users, setUsers] = useState<UserAPIResponse[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +34,7 @@ function Publicidad() {
 
   const handleFilter = useCallback((filtered: PublicidadAPIResponse[]) => {
     setFilteredAds(filtered);
-    setCurrentPage(1); // resetear paginación al filtrar
+    setCurrentPage(1); 
   }, []);
 
   const totalPages = Math.ceil(filteredAds.length / itemsPerPage);
@@ -63,9 +65,10 @@ function Publicidad() {
       <Navbar onFilter={handleFilter} />
 
       <div className={styles.mainContent}>
-        {isDrawerOpen && <div className={styles.overlay} onClick={closeDrawer} />}
+        {isDrawerOpen && (
+          <div className={styles.overlay} onClick={closeDrawer} />
+        )}
 
-        {/* Grid de tarjetas */}
         <div className={styles.gridContainer}>
           {paginatedAds.map((ad) => {
             const user = users.find((u) => u.id === ad.userId);
@@ -76,13 +79,11 @@ function Publicidad() {
                 style={{ minWidth: "200px" }}
                 onClick={() => handleCardClick(ad)}
               >
-                <Card
-                  image="https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
-                >
+                <Card image="https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg">
                   <div className={styles.cardContent}>
                     {user && (
                       <div style={{ display: "flex", alignItems: "end" }}>
-                        <Chip label={user.name} />
+                        <Chip label={user.username} />
                       </div>
                     )}
                     <h4 className={styles.cardTitle}>{ad.title}</h4>
@@ -94,7 +95,9 @@ function Publicidad() {
                         overflow: "hidden",
                       }}
                     >
-                      {ad.body.length > 60 ? ad.body.slice(0, 77) + "..." : ad.body}
+                      {ad.body.length > 60
+                        ? ad.body.slice(0, 77) + "..."
+                        : ad.body}
                     </p>
                   </div>
                   <div
@@ -114,7 +117,6 @@ function Publicidad() {
           })}
         </div>
 
-        {/* Paginación */}
         <div className={styles.pagination}>
           <button
             className={styles.paginationButton}
@@ -135,9 +137,10 @@ function Publicidad() {
           </button>
         </div>
 
-        {/* Drawer de detalles */}
         <div
-          className={`${styles.drawer} ${isDrawerOpen ? styles.drawerOpen : ""}`}
+          className={`${styles.drawer} ${
+            isDrawerOpen ? styles.drawerOpen : ""
+          }`}
           style={{ maxWidth: "400px", width: "100%" }}
         >
           {selectedAd && (
@@ -157,7 +160,6 @@ function Publicidad() {
                 />
                 <p className={styles.drawerText}>{selectedAd.body}</p>
 
-                {/* Datos del usuario */}
                 {(() => {
                   const user = users.find((u) => u.id === selectedAd.userId);
                   if (!user) return null;
@@ -178,7 +180,6 @@ function Publicidad() {
                   );
                 })()}
 
-                {/* Comentarios */}
                 <div className={styles.commentsList}>
                   {comments.length === 0 ? (
                     <p className={styles.noComments}>No hay comentarios aún.</p>

@@ -30,7 +30,6 @@
     transform: translateX(0);
 }
 
-/* Móvil */
 @media (max-width: 768px) {
     .vertical-navbar {
         width: 260px;
@@ -65,7 +64,6 @@
     outline: none;
 }
 
-/* Botón toggle */
 .navbar-toggle {
     display: block;
     position: fixed;
@@ -95,7 +93,6 @@
     }
 }
 
-/* Scrollbar personalizado */
 .vertical-navbar::-webkit-scrollbar {
     width: 8px;
 }
