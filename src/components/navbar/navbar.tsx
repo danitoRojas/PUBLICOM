@@ -12,14 +12,11 @@ const Navbar = ({
 }: {
   onFilter: (ads: PublicacionesAPIResponce[]) => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [searchType, setSearchType] = useState<"title" | "body" | "username">(
     "title"
   );
   const [username, setUsername] = useState<string>("");
-
-  const toggleNavbar = () => setIsOpen(!isOpen);
 
   const handleSearch = useCallback(async (query: string) => {
     try {
@@ -66,13 +63,8 @@ const Navbar = ({
 
   return (
     <>
-      {!isMobile && (
-        <button className="navbar-toggle" onClick={toggleNavbar}>
-          {isOpen ? "Cerrar" : "Filtros"}
-        </button>
-      )}
       <div
-        className={`vertical-navbar ${isMobile ? "open" : isOpen ? "open" : ""}`}
+        className={`vertical-navbar open`}
         style={isMobile ? { transform: "translateX(0)" } : {}}
       >
         <h3>Filtros</h3>
@@ -101,5 +93,6 @@ const Navbar = ({
     </>
   );
 };
+
 
 export default Navbar;
