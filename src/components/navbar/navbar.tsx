@@ -85,7 +85,7 @@ const Navbar = ({
             onChange={handleSearchTypeChange}
           >
             <option value="title">Título</option>
-            <option value="body">Cuerpo</option>
+            <option value="body">Contenido</option>
             <option value="username">Nombre de Usuario</option>
           </select>
         </div>
