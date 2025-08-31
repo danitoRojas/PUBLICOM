@@ -4,7 +4,9 @@ import Navbar from "./components/navbar/navbar"; // Import Navbar
 function App() {
     return (
         <div style={{ display: "flex" }}>
-            <Navbar /> 
+            <Navbar onFilter={function (): void {
+                throw new Error("Function not implemented.");
+            } } /> 
             <Publicidad />
         </div>
     );
