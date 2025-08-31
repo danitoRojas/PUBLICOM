@@ -27,7 +27,15 @@ const Drawer: React.FC<DrawerProps> = ({
   return (
     <div
       className={`${styles.drawer} ${isOpen ? styles.drawerOpen : ""}`}
-      style={{ maxWidth: "400px", width: "100%" }}
+      style={{
+        maxWidth: "550px",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        opacity: isOpen ? 1 : 0,
+        transition: "opacity 0.4s ease",
+      }}
     >
       <div className={styles.drawerHeader}>
         <h3 className={styles.drawerTitle}>{selectedAd.title}</h3>
@@ -60,6 +68,7 @@ const Drawer: React.FC<DrawerProps> = ({
           </div>
         )}
 
+        <h4 style={{ marginBottom: "1rem", color: "#1976d2" }}>Comentarios</h4>
         <div className={styles.commentsList}>
           {comments.length === 0 ? (
             <p className={styles.noComments}>No hay comentarios aún.</p>

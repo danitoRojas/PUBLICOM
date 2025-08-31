@@ -5,10 +5,11 @@
   width: 100%;
   max-width: 400px;
   height: 100vh;
-  background: white;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #ffffff, #f7f7f7);
+  border-left: 1px solid #ddd;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
   z-index: 1001;
-  transition: right 0.3s ease-in-out;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
 }
 
@@ -21,7 +22,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid #ddd;
   background: #f8f9fa;
 }
 
@@ -29,6 +30,7 @@
   color: #1976d2;
   margin: 0;
   font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .closeButton {
@@ -43,11 +45,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .closeButton:hover {
   color: #333;
-  background: #eee;
+  background: #f0f0f0;
   border-radius: 50%;
 }
 
@@ -73,41 +76,53 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 .noComments {
   text-align: center;
-  color: #999;
+  color: #777;
   font-style: italic;
   padding: 40px 20px;
+  font-size: 1rem;
 }
 
 .commentCard {
-  background: white;
+  background: #fff;
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #f0f0f0;
+  border: 1px solid #e0e0e0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .commentCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .commentText {
   margin: 0 0 12px 0;
-  color: #333;
-  line-height: 1.5;
-  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+  font-size: 15px;
 }
 
 .commentMeta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid #e0e0e0;
   padding-top: 8px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.commentDate {
+  font-style: italic;
+  color: #999;
 }
