@@ -8,12 +8,12 @@
   gap: 8px;
   font-size: 14px;
   transition: background 0.2s;
-  flex-shrink: 0; /* Evitar que el chip se reduzca en espacios pequeños */
-  max-width: fit-content; /* Ajustar el ancho al contenido */
-  white-space: nowrap; /* Asegurar que el texto no se divida */
-  overflow: visible; /* Permitir que el contenido se ajuste sin ocultarse */
-  text-overflow: unset; /* Eliminar puntos suspensivos para texto largo */
-  flex-wrap: nowrap; /* Evitar que el chip se divida en varias líneas */
+  flex-shrink: 0; 
+  max-width: fit-content; 
+  white-space: nowrap; 
+  overflow: visible; 
+  text-overflow: unset; 
+  flex-wrap: nowrap; 
 }
 
 .chip:hover {
@@ -23,5 +23,5 @@
 .icon {
   display: flex;
   align-items: center;
-  flex-shrink: 0; /* Evitar que el ícono se reduzca */
+  flex-shrink: 0; 
 }

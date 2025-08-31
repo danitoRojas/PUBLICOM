@@ -13,10 +13,9 @@ const Navbar = ({
   onFilter: (ads: PublicidadAPIResponce[]) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchType, setSearchType] = useState<
-    "title" | "body" | "userId" | "username"
-  >("title");
-  const [userId, setUserId] = useState<string>("");
+  const [searchType, setSearchType] = useState<"title" | "body" | "username">(
+    "title"
+  );
   const [username, setUsername] = useState<string>("");
 
   const toggleNavbar = () => setIsOpen(!isOpen);
@@ -29,13 +28,6 @@ const Navbar = ({
         results = await getPublicidades(query, undefined, undefined);
       } else if (searchType === "body") {
         results = await getPublicidades(undefined, query, undefined);
-      } else if (searchType === "userId") {
-        const id = parseInt(userId);
-        if (!isNaN(id)) {
-          results = await getPublicidades(undefined, undefined, id);
-        } else {
-          results = [];
-        }
       } else if (searchType === "username" && username.trim()) {
         const user = await getUserByUsername(username.trim());
         if (user) {
@@ -52,8 +44,7 @@ const Navbar = ({
   };
 
   const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchType(e.target.value as "title" | "body" | "userId" | "username");
-    setUserId("");
+    setSearchType(e.target.value as "title" | "body" | "username");
     setUsername("");
   };
 
@@ -80,39 +71,12 @@ const Navbar = ({
           >
             <option value="title">Título</option>
             <option value="body">Cuerpo</option>
-            <option value="userId">ID de Usuario</option>
             <option value="username">Nombre de Usuario</option>
           </select>
         </div>
 
-        {searchType === "userId" && (
-          <div className="filter-group">
-            <label htmlFor="userId">ID de Usuario:</label>
-            <input
-              id="userId"
-              type="number"
-              className="filter-select"
-              value={userId}
-              onChange={(e) => {
-                setUserId(e.target.value);
-                handleSearch(e.target.value);
-              }}
-            />
-          </div>
-        )}
-
         {searchType === "username" && (
-          <div className="filter-group">
-            <label htmlFor="username">Nombre de Usuario:</label>
-            <input
-              id="username"
-              type="text"
-              className="filter-select"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Escribe el nombre del usuario"
-            />
-          </div>
+          <Search onSearch={(query) => setUsername(query)} />
         )}
 
         {(searchType === "title" || searchType === "body") && (
