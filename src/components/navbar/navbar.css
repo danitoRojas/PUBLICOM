@@ -1,0 +1,93 @@
+.vertical-navbar {
+    width: 20%; /* Ancho del 20% para pantallas grandes */
+    min-width: 250px; /* Ancho mínimo para evitar que sea demasiado pequeño */
+    background-color: #f4f4f4;
+    height: 100vh;
+    padding: 16px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    z-index: 1100; /* Asegurar que el navbar esté por encima de otros elementos */
+}
+
+.vertical-navbar.open {
+    transform: translateX(0); /* Mostrar el navbar cuando esté abierto */
+}
+
+@media (max-width: 768px) {
+    .vertical-navbar {
+        width: 250px; /* Ancho fijo en pantallas pequeñas */
+        transform: translateX(-100%); /* Ocultar el navbar por defecto */
+        position: fixed;
+        z-index: 1000;
+    }
+
+    .vertical-navbar.open {
+        transform: translateX(0); /* Mostrar el navbar cuando esté abierto */
+    }
+}
+
+.filter-group {
+    margin-bottom: 16px;
+}
+
+.filter-input,
+.filter-select,
+.filter-date {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 8px;
+}
+
+ul li button {
+    width: 100%;
+    padding: 8px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+ul li button:hover {
+    background-color: #155a9c;
+}
+
+.navbar-toggle {
+    display: block; /* Mostrar el botón de alternancia en pantallas pequeñas */
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    z-index: 1101; /* Asegurar que el botón esté por encima del navbar */
+}
+
+.navbar-toggle:hover {
+    background-color: #155a9c;
+}
+
+@media (min-width: 769px) {
+    .navbar-toggle {
+        display: none; /* Ocultar el botón de alternancia en pantallas grandes */
+    }
+}
