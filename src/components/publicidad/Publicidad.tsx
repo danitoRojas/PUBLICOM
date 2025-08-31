@@ -1,69 +1,71 @@
 import Card from "../UI/cards/card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./Publicidad.module.css";
 import IconButtons from "../UI/buttons/iconButtons";
 import { getPublicidades } from "../../api/publicidad/publicidad";
-import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
+import { PublicidadAPIResponse } from "../../interfaces/publicidad.interface";
 import { fetchUsers } from "../../api/users/user";
 import { fetchComentarios } from "../../api/comentarios/comentarios";
 import { ComentarioAPIResponse } from "../../interfaces/comentarios";
-
 import { Chip } from "../UI/chips/chips";
 import { UserAPIResponse } from "../../interfaces/user";
+import Navbar from "../navbar/navbar";
 
 function Publicidad() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [ads, setAds] = useState<PublicidadAPIResponce[]>([]);
-  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponce | null>(
-    null
-  );
+  const [ads, setAds] = useState<PublicidadAPIResponse[]>([]);
+  const [filteredAds, setFilteredAds] = useState<PublicidadAPIResponse[]>([]);
+  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponse | null>(null);
   const [comments, setComments] = useState<ComentarioAPIResponse[]>([]);
   const [users, setUsers] = useState<UserAPIResponse[]>([]);
-32.0
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const itemsPerPage = 4;
 
   useEffect(() => {
-    getPublicidades().then(setAds);
+    getPublicidades().then((data) => {
+      setAds(data);
+      setFilteredAds(data);
+    });
     fetchUsers().then(setUsers);
   }, []);
 
-  const totalPages = Math.ceil(ads.length / itemsPerPage);
-  const paginatedAds = ads.slice(
+  const handleFilter = useCallback((filtered: PublicidadAPIResponse[]) => {
+    setFilteredAds(filtered);
+    setCurrentPage(1); // resetear paginación al filtrar
+  }, []);
+
+  const totalPages = Math.ceil(filteredAds.length / itemsPerPage);
+  const paginatedAds = filteredAds.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handleCardClick = async (ad: PublicidadAPIResponce) => {
+  const handleCardClick = useCallback(async (ad: PublicidadAPIResponse) => {
     setSelectedAd(ad);
     setIsDrawerOpen(true);
     const comentarios = await fetchComentarios(ad.id);
     setComments(comentarios);
-  };
+  }, []);
 
-  const closeDrawer = () => {
-    setIsDrawerOpen(false);
-  };
+  const closeDrawer = () => setIsDrawerOpen(false);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
   return (
     <div className={styles.layoutContainer}>
-      <div className={styles.mainContent}>
-        {isDrawerOpen && (
-          <div className={styles.overlay} onClick={closeDrawer} />
-        )}
+      <Navbar onFilter={handleFilter} />
 
+      <div className={styles.mainContent}>
+        {isDrawerOpen && <div className={styles.overlay} onClick={closeDrawer} />}
+
+        {/* Grid de tarjetas */}
         <div className={styles.gridContainer}>
           {paginatedAds.map((ad) => {
             const user = users.find((u) => u.id === ad.userId);
@@ -71,36 +73,16 @@ function Publicidad() {
               <div
                 key={ad.id}
                 className={styles.cardContainer}
-                style={{ minWidth: "200px" }} /* Asegurar un ancho mínimo para las tarjetas */
+                style={{ minWidth: "200px" }}
                 onClick={() => handleCardClick(ad)}
               >
                 <Card
-                  image={
-                    "https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
-                  }
+                  image="https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
                 >
                   <div className={styles.cardContent}>
-                    {/* Chips de usuario en la tarjeta principal */}
                     {user && (
-                      <div
-                        style={{
-                          display: "flex",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "end",
-                          }}
-                        >
-                        <span
-                            style={{
-                              color: "#555",
-                            }}
-                          >
-                          </span>
-                          <Chip label={user.name} />
-                        </div>
+                      <div style={{ display: "flex", alignItems: "end" }}>
+                        <Chip label={user.name} />
                       </div>
                     )}
                     <h4 className={styles.cardTitle}>{ad.title}</h4>
@@ -108,19 +90,15 @@ function Publicidad() {
                       className={styles.cardText}
                       style={{
                         fontSize: "0.85rem",
-                        maxHeight: "2.8em",
+                        maxHeight: "3.8em",
                         overflow: "hidden",
-                        marginBottom: "0.5rem",
                       }}
                     >
-                      {ad.body.length > 70
-                        ? ad.body.slice(0, 67) + "..."
-                        : ad.body}
+                      {ad.body.length > 60 ? ad.body.slice(0, 77) + "..." : ad.body}
                     </p>
                   </div>
                   <div
                     style={{
-                      marginTop: "auto",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
@@ -135,6 +113,8 @@ function Publicidad() {
             );
           })}
         </div>
+
+        {/* Paginación */}
         <div className={styles.pagination}>
           <button
             className={styles.paginationButton}
@@ -155,14 +135,10 @@ function Publicidad() {
           </button>
         </div>
 
+        {/* Drawer de detalles */}
         <div
-          className={`${styles.drawer} ${
-            isDrawerOpen ? styles.drawerOpen : ""
-          }`}
-          style={{
-            maxWidth: "400px", // Limit drawer width on larger screens
-            width: "100%", // Full width for smaller screens
-          }}
+          className={`${styles.drawer} ${isDrawerOpen ? styles.drawerOpen : ""}`}
+          style={{ maxWidth: "400px", width: "100%" }}
         >
           {selectedAd && (
             <>
@@ -175,15 +151,13 @@ function Publicidad() {
 
               <div className={styles.drawerContent}>
                 <img
-                  src={
-                    "https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
-                  }
+                  src="https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
                   alt={selectedAd.title}
                   className={styles.drawerImage}
                 />
                 <p className={styles.drawerText}>{selectedAd.body}</p>
 
-                {/* Mostrar datos importantes del usuario en chips */}
+                {/* Datos del usuario */}
                 {(() => {
                   const user = users.find((u) => u.id === selectedAd.userId);
                   if (!user) return null;
@@ -204,6 +178,7 @@ function Publicidad() {
                   );
                 })()}
 
+                {/* Comentarios */}
                 <div className={styles.commentsList}>
                   {comments.length === 0 ? (
                     <p className={styles.noComments}>No hay comentarios aún.</p>

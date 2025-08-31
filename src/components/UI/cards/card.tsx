@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ children, style, image, className }) => (
         className={styles.cardImage}
       />
     )}
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+    <div className={styles.cardScrollableContent}>
       {children}
     </div>
   </div>

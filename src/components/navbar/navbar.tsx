@@ -1,16 +1,33 @@
 import Search from '../UI/shearch/shearch';
 import './navbar.css';
 import { useState } from 'react';
+import { getPublicidades } from '../../api/publicidad/publicidad';
+import { PublicidadAPIResponce } from '../../interfaces/publicidad.interface';
 
-const Navbar = () => {
+const Navbar = ({ onFilter }: { onFilter: (ads: PublicidadAPIResponce[]) => void }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [searchType, setSearchType] = useState<'title' | 'body'>('title'); // Estado para el tipo de búsqueda
 
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleSearch = (query: string) => {
-        console.log('Search query:', query); // Replace with actual search logic
+    const handleSearch = async (query: string) => {
+        try {
+            let results: PublicidadAPIResponce[] = [];
+            if (searchType === 'title') {
+                results = await getPublicidades(query, undefined); // Buscar por título
+            } else if (searchType === 'body') {
+                results = await getPublicidades(undefined, query); // Buscar por cuerpo
+            }
+            onFilter(results); // Pasar los resultados filtrados al componente padre
+        } catch (error) {
+            console.error('Error fetching publicidades:', error);
+        }
+    };
+
+    const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchType(e.target.value as 'title' | 'body'); // Actualizar el tipo de búsqueda
     };
 
     return (
@@ -20,6 +37,18 @@ const Navbar = () => {
             </button>
             <div className={`vertical-navbar ${isOpen ? 'open' : ''}`}>
                 <h3>Filtros</h3>
+                <div className="filter-group">
+                    <label htmlFor="searchType">Buscar por:</label>
+                    <select
+                        id="searchType"
+                        className="filter-select"
+                        value={searchType}
+                        onChange={handleSearchTypeChange}
+                    >
+                        <option value="title">Título</option>
+                        <option value="body">Cuerpo</option>
+                    </select>
+                </div>
                 <Search onSearch={handleSearch} />
                 <div className="filter-group">
                     <select className="filter-select">
@@ -33,5 +62,6 @@ const Navbar = () => {
         </>
     );
 };
+
 
 export default Navbar;
