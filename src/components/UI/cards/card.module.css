@@ -2,32 +2,27 @@
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: #fff;
-  padding: 16px; /* Asegurar suficiente espacio interno para los chips */
+  padding: 16px; 
   border: 1px solid #eee;
   width: 100%;   
-  height: auto; /* Ajustar altura automáticamente */ 
+  height: 350px; 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   box-sizing: border-box;
   overflow: hidden; 
-  max-width: 100%; /* Asegurar que la tarjeta no exceda el ancho del contenedor */
-  margin: 0 auto; /* Centrar la tarjeta horizontalmente */
-  word-wrap: break-word; /* Ajustar texto largo dentro de la tarjeta */
-  flex: 1 1 auto; /* Permitir que las tarjetas se ajusten dinámicamente */
-  gap: 8px; /* Agregar espacio entre los elementos internos */
 }
 
 .cardImage {
-  width: 100%; /* Asegurar que la imagen ocupe el ancho completo de la tarjeta */
+  width: 100%;
   border-radius: 12px 12px 0 0;
   margin-bottom: 16px;
-  height: auto; /* Ajustar la altura automáticamente */ 
-  max-height: 200px; /* Limitar la altura máxima */
+  height: 120px; 
+  min-height: 120px;
+  max-height: 120px;
   object-fit: cover;
   flex-shrink: 0;
-  max-width: 100%; /* Evitar que la imagen exceda el ancho de la tarjeta */
 }
 
 .expandedCard {

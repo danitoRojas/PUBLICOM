@@ -19,11 +19,20 @@ function Publicidad() {
   );
   const [comments, setComments] = useState<ComentarioAPIResponse[]>([]);
   const [users, setUsers] = useState<UserAPIResponse[]>([]);
+32.0
+    const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     getPublicidades().then(setAds);
     fetchUsers().then(setUsers);
   }, []);
+
+  const totalPages = Math.ceil(ads.length / itemsPerPage);
+  const paginatedAds = ads.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleCardClick = async (ad: PublicidadAPIResponce) => {
     setSelectedAd(ad);
@@ -36,6 +45,18 @@ function Publicidad() {
     setIsDrawerOpen(false);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   return (
     <div className={styles.layoutContainer}>
       <div className={styles.mainContent}>
@@ -44,7 +65,7 @@ function Publicidad() {
         )}
 
         <div className={styles.gridContainer}>
-          {ads.map((ad) => {
+          {paginatedAds.map((ad) => {
             const user = users.find((u) => u.id === ad.userId);
             return (
               <div
@@ -64,15 +85,12 @@ function Publicidad() {
                       <div
                         style={{
                           display: "flex",
-                          gap: "1rem",
-                          marginBottom: "0.5rem",
                         }}
                       >
                         <div
                           style={{
                             display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
+                            alignItems: "end",
                           }}
                         >
                         <span
@@ -82,22 +100,6 @@ function Publicidad() {
                           >
                           </span>
                           <Chip label={user.name} />
-                        </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                          }}
-                        >
-                          <span
-                            style={{
-                              color: "#555",
-                            }}
-                          >
-                          </span>
-                          <Chip label={user.email} />
                         </div>
                       </div>
                     )}
@@ -132,6 +134,25 @@ function Publicidad() {
               </div>
             );
           })}
+        </div>
+        <div className={styles.pagination}>
+          <button
+            className={styles.paginationButton}
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </button>
+          <span className={styles.pageInfo}>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            className={styles.paginationButton}
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Siguiente
+          </button>
         </div>
 
         <div

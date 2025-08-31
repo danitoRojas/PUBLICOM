@@ -1,3 +1,4 @@
+import Search from '../UI/shearch/shearch';
 import './navbar.css';
 import { useState } from 'react';
 
@@ -8,6 +9,10 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleSearch = (query: string) => {
+        console.log('Search query:', query); // Replace with actual search logic
+    };
+
     return (
         <>
             <button className="navbar-toggle" onClick={toggleNavbar}>
@@ -15,13 +20,7 @@ const Navbar = () => {
             </button>
             <div className={`vertical-navbar ${isOpen ? 'open' : ''}`}>
                 <h3>Filtros</h3>
-                <div className="filter-group">
-                    <input
-                        type="text"
-                        placeholder="Buscar por título..."
-                        className="filter-input"
-                    />
-                </div>
+                <Search onSearch={handleSearch} />
                 <div className="filter-group">
                     <select className="filter-select">
                         <option value="">Tipo de publicidad</option>
@@ -30,18 +29,6 @@ const Navbar = () => {
                         <option value="tipo3">Tipo 3</option>
                     </select>
                 </div>
-                <div className="filter-group">
-                    <input
-                        type="date"
-                        className="filter-date"
-                    />
-                </div>
-                <ul>
-                    <li><button>Filtro 1</button></li>
-                    <li><button>Filtro 2</button></li>
-                    <li><button>Filtro 3</button></li>
-                    <li><button>Filtro 4</button></li>
-                </ul>
             </div>
         </>
     );
