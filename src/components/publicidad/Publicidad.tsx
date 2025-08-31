@@ -10,6 +10,8 @@ import { Chip } from "../UI/chips/chips";
 import { UserAPIResponse } from "../../interfaces/user";
 import Navbar from "../navbar/navbar";
 import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
+import Pagination from "../UI/pagination/pagination";
+import Drawer from "../UI/drawer/Drawer";
 
 function Publicidad() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -21,7 +23,7 @@ function Publicidad() {
   const [users, setUsers] = useState<UserAPIResponse[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
 
   useEffect(() => {
     getPublicidades().then((data) => {
@@ -115,90 +117,25 @@ function Publicidad() {
           })}
         </div>
 
-        <div className={styles.pagination}>
-          <button
-            className={styles.paginationButton}
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-          >
-            Anterior
-          </button>
-          <span className={styles.pageInfo}>
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            className={styles.paginationButton}
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Siguiente
-          </button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onNext={handleNextPage}
+          onPrev={handlePrevPage}
+        />
 
-        <div
-          className={`${styles.drawer} ${
-            isDrawerOpen ? styles.drawerOpen : ""
-          }`}
-          style={{ maxWidth: "400px", width: "100%" }}
-        >
-          {selectedAd && (
-            <>
-              <div className={styles.drawerHeader}>
-                <h3 className={styles.drawerTitle}>{selectedAd.title}</h3>
-                <button className={styles.closeButton} onClick={closeDrawer}>
-                  ×
-                </button>
-              </div>
-
-              <div className={styles.drawerContent}>
-                <img
-                  src="https://2.bp.blogspot.com/_EZ16vWYvHHg/S79tDYAX1bI/AAAAAAAAJ2w/Do2kAV8FCIE/s1600/www.BancodeImagenesGratuitas.com-FAP-17.jpg"
-                  alt={selectedAd.title}
-                  className={styles.drawerImage}
-                />
-                <p className={styles.drawerText}>{selectedAd.body}</p>
-
-                {(() => {
-                  const user = users.find((u) => u.id === selectedAd.userId);
-                  if (!user) return null;
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "0.5rem",
-                        flexWrap: "wrap",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      <Chip label={`Nombre: ${user.name}`} />
-                      <Chip label={`Email: ${user.email}`} />
-                      <Chip label={`Tel: ${user.phone}`} />
-                      <Chip label={`Empresa: ${user.company.name}`} />
-                    </div>
-                  );
-                })()}
-
-                <div className={styles.commentsList}>
-                  {comments.length === 0 ? (
-                    <p className={styles.noComments}>No hay comentarios aún.</p>
-                  ) : (
-                    comments.map((comment) => (
-                      <div key={comment.id} className={styles.commentCard}>
-                        <div className={styles.commentText}>{comment.body}</div>
-                        <div className={styles.commentMeta}>
-                          <span className={styles.commentDate}>{comment.email}</span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        <Drawer
+          isOpen={isDrawerOpen}
+          onClose={closeDrawer}
+          selectedAd={selectedAd}
+          users={users}
+          comments={comments}
+        />
       </div>
     </div>
   );
 }
+
+
 
 export default Publicidad;

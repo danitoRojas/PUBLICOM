@@ -13,7 +13,7 @@
     overflow-y: auto;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
     transform: translateX(0);
-    z-index: 1100;
+    z-index: 1000; /* Reducido para que el drawer tenga prioridad */
 }
 
 .vertical-navbar h3 {
@@ -28,6 +28,7 @@
 
 .vertical-navbar.open {
     transform: translateX(0);
+    box-shadow: 6px 0 20px rgba(0, 0, 0, 0.3); 
 }
 
 @media (max-width: 768px) {
