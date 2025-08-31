@@ -3,19 +3,18 @@ import { useState, useEffect, useCallback } from "react";
 import styles from "./Publicidad.module.css";
 import IconButtons from "../UI/buttons/iconButtons";
 import { getPublicidades } from "../../api/publicidad/publicidad";
-import { PublicidadAPIResponse } from "../../interfaces/publicidad.interface";
 import { fetchUsers } from "../../api/users/user";
 import { fetchComentarios } from "../../api/comentarios/comentarios";
 import { ComentarioAPIResponse } from "../../interfaces/comentarios";
 import { Chip } from "../UI/chips/chips";
 import { UserAPIResponse } from "../../interfaces/user";
 import Navbar from "../navbar/navbar";
+import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
 
 function Publicidad() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [ads, setAds] = useState<PublicidadAPIResponse[]>([]);
-  const [filteredAds, setFilteredAds] = useState<PublicidadAPIResponse[]>([]);
-  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponse | null>(
+  const [filteredAds, setFilteredAds] = useState<PublicidadAPIResponce[]>([]);
+  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponce | null>(
     null
   );
   const [comments, setComments] = useState<ComentarioAPIResponse[]>([]);
@@ -26,13 +25,12 @@ function Publicidad() {
 
   useEffect(() => {
     getPublicidades().then((data) => {
-      setAds(data);
       setFilteredAds(data);
     });
     fetchUsers().then(setUsers);
   }, []);
 
-  const handleFilter = useCallback((filtered: PublicidadAPIResponse[]) => {
+  const handleFilter = useCallback((filtered: PublicidadAPIResponce[]) => {
     setFilteredAds(filtered);
     setCurrentPage(1); 
   }, []);
@@ -43,7 +41,7 @@ function Publicidad() {
     currentPage * itemsPerPage
   );
 
-  const handleCardClick = useCallback(async (ad: PublicidadAPIResponse) => {
+  const handleCardClick = useCallback(async (ad: PublicidadAPIResponce) => {
     setSelectedAd(ad);
     setIsDrawerOpen(true);
     const comentarios = await fetchComentarios(ad.id);
@@ -188,9 +186,7 @@ function Publicidad() {
                       <div key={comment.id} className={styles.commentCard}>
                         <div className={styles.commentText}>{comment.body}</div>
                         <div className={styles.commentMeta}>
-                          <span className={styles.commentDate}>
-                            {comment.email}
-                          </span>
+                          <span className={styles.commentDate}>{comment.email}</span>
                         </div>
                       </div>
                     ))
