@@ -4,7 +4,6 @@ import styles from "./Publicidad.module.css";
 import IconButtons from "../UI/buttons/iconButtons";
 import { getPublicidades } from "../../api/publicidad/publicidad";
 import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
-import Navbar from "../navbar/Navbar";
 import { fetchUsers } from "../../api/users/user";
 import { fetchComentarios } from "../../api/comentarios/comentarios";
 import { ComentarioAPIResponse } from "../../interfaces/comentarios";
@@ -39,7 +38,6 @@ function Publicidad() {
 
   return (
     <div className={styles.layoutContainer}>
-      <Navbar />
       <div className={styles.mainContent}>
         {isDrawerOpen && (
           <div className={styles.overlay} onClick={closeDrawer} />
@@ -52,6 +50,7 @@ function Publicidad() {
               <div
                 key={ad.id}
                 className={styles.cardContainer}
+                style={{ minWidth: "200px" }} /* Asegurar un ancho mínimo para las tarjetas */
                 onClick={() => handleCardClick(ad)}
               >
                 <Card
@@ -81,7 +80,6 @@ function Publicidad() {
                               color: "#555",
                             }}
                           >
-                            <strong>Nombre:</strong>
                           </span>
                           <Chip label={user.name} />
                         </div>
@@ -98,7 +96,6 @@ function Publicidad() {
                               color: "#555",
                             }}
                           >
-                            <strong>Email:</strong>
                           </span>
                           <Chip label={user.email} />
                         </div>
@@ -141,6 +138,10 @@ function Publicidad() {
           className={`${styles.drawer} ${
             isDrawerOpen ? styles.drawerOpen : ""
           }`}
+          style={{
+            maxWidth: "400px", // Limit drawer width on larger screens
+            width: "100%", // Full width for smaller screens
+          }}
         >
           {selectedAd && (
             <>

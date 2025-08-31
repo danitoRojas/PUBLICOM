@@ -1,24 +1,29 @@
 .layoutContainer {
   display: flex;
+  flex-direction: row; /* Alinear el navbar y las tarjetas en fila */
   height: 100vh;
   width: 100vw;
   background: #f7f7f7;
+  overflow: hidden; /* Evitar desplazamiento horizontal */
 }
 
 .mainContent {
-  flex: 1;
-  padding: 32px 24px;
+  flex: 1; /* Ocupa el espacio restante (80%) */
+  margin-left: 24%; /* Espacio para el navbar en pantallas grandes */
+  padding: 16px;
   overflow-y: auto;
   position: relative;
 }
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajustar columnas automáticamente para pantallas más pequeñas */
+  gap: 12px; /* Reducir el espacio entre tarjetas */
   width: 100%;
   margin: 0 auto;
   max-width: 1200px;
+  padding: 0 4px; /* Reducir el padding lateral en pantallas pequeñas */
+  box-sizing: border-box; /* Incluir padding en el ancho total */
 }
 
 @media (max-width: 900px) {
@@ -33,11 +38,19 @@
   }
 }
 
+@media (min-width: 1200px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr); /* Mostrar solo 3 columnas en pantallas grandes */
+  }
+}
+
 .cardContainer {
   cursor: pointer;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   display: flex;
-  flex: none;
+  flex: 1 1 calc(100% - 8px); /* Permitir que las tarjetas ocupen el ancho completo con un pequeño margen */
+  max-width: 100%; /* Asegurar que las tarjetas no excedan el ancho del contenedor */
+  overflow: visible; /* Permitir que el contenido se ajuste sin ocultarse */
 }
 
 .cardContainer:hover {
@@ -47,6 +60,10 @@
 
 .cardContent {
   text-align: start;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap; /* Evitar que los chips se ajusten a una nueva línea */
+  gap: 8px; /* Espaciado entre los chips */
 }
 
 .cardTitle {
@@ -81,8 +98,9 @@
 .drawer {
   position: fixed;
   top: 0;
-  right: -400px;
-  width: 400px;
+  right: -100%; /* Cambiar para que sea responsivo */
+  width: 100%; /* Usar ancho completo en pantallas pequeñas */
+  max-width: 400px; /* Limitar el ancho en pantallas más grandes */
   height: 100vh;
   background: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
@@ -205,7 +223,11 @@
 
 @media (max-width: 768px) {
   .drawer {
-    width: 100%;
-    right: -100%;
+    width: 100%; /* Ancho completo para dispositivos más pequeños */
+    max-width: none; /* Eliminar límite de ancho */
+  }
+
+  .mainContent {
+    margin-left: 0; /* Eliminar el margen cuando el navbar esté oculto */
   }
 }
