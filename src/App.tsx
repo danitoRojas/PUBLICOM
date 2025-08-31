@@ -1,5 +1,5 @@
-import Publicidad from "./components/publicidad/Publicidad";
 import Navbar from "./components/navbar/navbar"; // Import Navbar
+import Publicacion from "./components/publicacion/Publicacion";
 
 function App() {
     return (
@@ -7,7 +7,7 @@ function App() {
             <Navbar onFilter={function (): void {
                 throw new Error("Function not implemented.");
             } } /> 
-            <Publicidad />
+            <Publicacion />
         </div>
     );
 }

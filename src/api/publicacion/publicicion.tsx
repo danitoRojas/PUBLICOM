@@ -1,11 +1,11 @@
-import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
+import { PublicacionesAPIResponce } from "../../interfaces/publicacion.interface";
 import { UserAPIResponse } from "../../interfaces/user";
 
-export async function getPublicidades(
+export async function getPublicaciones(
   title?: string,
   body?: string,
   userId?: number
-): Promise<PublicidadAPIResponce[]> {
+): Promise<PublicacionesAPIResponce[]> {
   let url = "https://jsonplaceholder.typicode.com/posts";
   const params: string[] = [];
 
@@ -20,9 +20,9 @@ export async function getPublicidades(
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Error fetching publicidades");
+    throw new Error("Error fetching publicaciones");
   }
-  const data: PublicidadAPIResponce[] = await response.json();
+  const data: PublicacionesAPIResponce[] = await response.json();
   return data;
 }
 

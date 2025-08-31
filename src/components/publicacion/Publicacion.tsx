@@ -2,22 +2,22 @@ import Card from "../UI/cards/card";
 import { useState, useEffect, useCallback } from "react";
 import styles from "./Publicidad.module.css";
 import IconButtons from "../UI/buttons/iconButtons";
-import { getPublicidades } from "../../api/publicidad/publicidad";
+import { getPublicaciones } from "../../api/publicacion/publicicion";
 import { fetchUsers } from "../../api/users/user";
 import { fetchComentarios } from "../../api/comentarios/comentarios";
 import { ComentarioAPIResponse } from "../../interfaces/comentarios";
 import { Chip } from "../UI/chips/chips";
 import { UserAPIResponse } from "../../interfaces/user";
 import Navbar from "../navbar/navbar";
-import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
+import { PublicacionesAPIResponce } from "../../interfaces/publicacion.interface";
 import Pagination from "../UI/pagination/pagination";
 import Drawer from "../UI/drawer/Drawer";
 import IconUser from "../../assets/icon/user";
 
-function Publicidad() {
+function Publicacion() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [filteredAds, setFilteredAds] = useState<PublicidadAPIResponce[]>([]);
-  const [selectedAd, setSelectedAd] = useState<PublicidadAPIResponce | null>(
+  const [filteredAds, setFilteredAds] = useState<PublicacionesAPIResponce[]>([]);
+  const [selectedAd, setSelectedAd] = useState<PublicacionesAPIResponce | null>(
     null
   );
   const [comments, setComments] = useState<ComentarioAPIResponse[]>([]);
@@ -27,13 +27,13 @@ function Publicidad() {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    getPublicidades().then((data) => {
+    getPublicaciones().then((data) => {
       setFilteredAds(data);
     });
     fetchUsers().then(setUsers);
   }, []);
 
-  const handleFilter = useCallback((filtered: PublicidadAPIResponce[]) => {
+  const handleFilter = useCallback((filtered: PublicacionesAPIResponce[]) => {
     setFilteredAds(filtered);
     setCurrentPage(1); 
   }, []);
@@ -44,7 +44,7 @@ function Publicidad() {
     currentPage * itemsPerPage
   );
 
-  const handleCardClick = useCallback(async (ad: PublicidadAPIResponce) => {
+  const handleCardClick = useCallback(async (ad: PublicacionesAPIResponce) => {
     setSelectedAd(ad);
     setIsDrawerOpen(true);
     const comentarios = await fetchComentarios(ad.id);
@@ -139,4 +139,4 @@ function Publicidad() {
 
 
 
-export default Publicidad;
+export default Publicacion;

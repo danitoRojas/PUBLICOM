@@ -1,4 +1,4 @@
-export interface PublicidadAPIResponce {
+export interface PublicacionesAPIResponce {
     userId: number;
     id:     number;
     title:  string;

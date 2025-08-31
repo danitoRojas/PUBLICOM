@@ -2,15 +2,15 @@ import Search from "../UI/shearch/shearch";
 import "./navbar.css";
 import { useState, useEffect, useCallback } from "react";
 import {
-  getPublicidades,
+  getPublicaciones,
   getUserByUsername,
-} from "../../api/publicidad/publicidad";
-import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
+} from "../../api/publicacion/publicicion";
+import { PublicacionesAPIResponce } from "../../interfaces/publicacion.interface";
 
 const Navbar = ({
   onFilter,
 }: {
-  onFilter: (ads: PublicidadAPIResponce[]) => void;
+  onFilter: (ads: PublicacionesAPIResponce[]) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -23,16 +23,16 @@ const Navbar = ({
 
   const handleSearch = useCallback(async (query: string) => {
     try {
-      let results: PublicidadAPIResponce[] = [];
+      let results: PublicacionesAPIResponce[] = [];
 
       if (searchType === "title") {
-        results = await getPublicidades(query, undefined, undefined);
+        results = await getPublicaciones(query, undefined, undefined);
       } else if (searchType === "body") {
-        results = await getPublicidades(undefined, query, undefined);
+        results = await getPublicaciones(undefined, query, undefined);
       } else if (searchType === "username" && username.trim()) {
         const user = await getUserByUsername(username.trim());
         if (user) {
-          results = await getPublicidades(undefined, undefined, user.id);
+          results = await getPublicaciones(undefined, undefined, user.id);
         } else {
           results = [];
         }
@@ -40,7 +40,7 @@ const Navbar = ({
 
       onFilter(results);
     } catch (error) {
-      console.error("Error fetching publicidades:", error);
+      console.error("Error fetching publicacion:", error);
     }
   }, [searchType, username, onFilter]);
 

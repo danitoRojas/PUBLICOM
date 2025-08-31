@@ -31,7 +31,7 @@ src/
     icon/
   components/
     navbar/
-    publicidad/
+    publicacion/
     UI/
   interfaces/
   styles/

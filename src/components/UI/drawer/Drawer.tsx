@@ -3,12 +3,12 @@ import styles from "./drawer.module.css";
 import { Chip } from "../chips/chips";
 import { ComentarioAPIResponse } from "../../../interfaces/comentarios";
 import { UserAPIResponse } from "../../../interfaces/user";
-import { PublicidadAPIResponce } from "../../../interfaces/publicidad.interface";
+import { PublicacionesAPIResponce } from "../../../interfaces/publicacion.interface";
 
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedAd: PublicidadAPIResponce | null;
+  selectedAd: PublicacionesAPIResponce | null;
   users: UserAPIResponse[];
   comments: ComentarioAPIResponse[];
 }
