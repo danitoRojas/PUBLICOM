@@ -3,7 +3,7 @@
   align-items: center;
   padding: 4px 12px;
   border-radius: 16px;
-  background: #22249c;
+  background: #e9ae39;
   cursor: pointer;
   gap: 8px;
   font-size: 14px;
@@ -17,11 +17,16 @@
 }
 
 .chip:hover {
-  background: #0167ff;
+  background: #2661eaaa;
 }
 
 .icon {
   display: flex;
   align-items: center;
   flex-shrink: 0; 
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
 }

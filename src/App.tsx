@@ -4,7 +4,7 @@ import Navbar from "./components/navbar/navbar"; // Import Navbar
 function App() {
     return (
         <div style={{ display: "flex" }}>
-            <Navbar /> {/* Render Navbar */}
+            <Navbar /> 
             <Publicidad />
         </div>
     );

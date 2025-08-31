@@ -1,6 +1,6 @@
 import Search from "../UI/shearch/shearch";
 import "./navbar.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   getPublicidades,
   getUserByUsername,
@@ -13,6 +13,7 @@ const Navbar = ({
   onFilter: (ads: PublicidadAPIResponce[]) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [searchType, setSearchType] = useState<"title" | "body" | "username">(
     "title"
   );
@@ -20,7 +21,7 @@ const Navbar = ({
 
   const toggleNavbar = () => setIsOpen(!isOpen);
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = useCallback(async (query: string) => {
     try {
       let results: PublicidadAPIResponce[] = [];
 
@@ -41,7 +42,7 @@ const Navbar = ({
     } catch (error) {
       console.error("Error fetching publicidades:", error);
     }
-  };
+  }, [searchType, username, onFilter]);
 
   const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchType(e.target.value as "title" | "body" | "username");
@@ -52,14 +53,28 @@ const Navbar = ({
     if (searchType === "username" && username.trim()) {
       handleSearch(username);
     }
-  }, [username, searchType]);
+  }, [username, searchType, handleSearch]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
-      <button className="navbar-toggle" onClick={toggleNavbar}>
-        {isOpen ? "Cerrar" : "Filtros"}
-      </button>
-      <div className={`vertical-navbar ${isOpen ? "open" : ""}`}>
+      {!isMobile && (
+        <button className="navbar-toggle" onClick={toggleNavbar}>
+          {isOpen ? "Cerrar" : "Filtros"}
+        </button>
+      )}
+      <div
+        className={`vertical-navbar ${isMobile ? "open" : isOpen ? "open" : ""}`}
+        style={isMobile ? { transform: "translateX(0)" } : {}}
+      >
         <h3>Filtros</h3>
         <div className="filter-group">
           <label htmlFor="searchType">Buscar por:</label>

@@ -12,7 +12,7 @@ export async function getPublicidades(
   if (title?.trim())
     params.push(`title_like=${encodeURIComponent(title.trim())}`);
   if (body?.trim()) params.push(`body_like=${encodeURIComponent(body.trim())}`);
-  if (userId !== undefined) params.push(`userId=${userId}`); // Add userId to query string
+  if (userId !== undefined) params.push(`userId=${userId}`); 
 
   if (params.length > 0) {
     url += `?${params.join("&")}`;

@@ -12,6 +12,7 @@ import Navbar from "../navbar/navbar";
 import { PublicidadAPIResponce } from "../../interfaces/publicidad.interface";
 import Pagination from "../UI/pagination/pagination";
 import Drawer from "../UI/drawer/Drawer";
+import IconUser from "../../assets/icon/user";
 
 function Publicidad() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -83,7 +84,7 @@ function Publicidad() {
                   <div className={styles.cardContent}>
                     {user && (
                       <div style={{ display: "flex", alignItems: "end" }}>
-                        <Chip label={user.username} />
+                        <Chip label={user.username} chip={<IconUser />} />
                       </div>
                     )}
                     <h4 className={styles.cardTitle}>{ad.title}</h4>
